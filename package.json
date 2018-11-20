@@ -1,0 +1,9 @@
+{
+  "name": "todo-elm",
+  "version": "0.0.0",
+  "description": "NK Todo App",
+  "main": "index.js",
+  "repository": "git@github.com:cabaalexander/todo-elm.git",
+  "author": "cabaalexander <cabaalexander321@gmail.com>",
+  "license": "MIT"
+}
