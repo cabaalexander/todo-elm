@@ -1,44 +1,10 @@
-module Main exposing (Model, Msg(..), init, main, subscriptions, update, view)
+module Main exposing (init, main, subscriptions)
 
 import Html exposing (Html, div, program, text)
-
-
-
--- MODEL
-
-
-type alias Model =
-    String
-
-
-init : ( Model, Cmd Msg )
-init =
-    ( "Hello", Cmd.none )
-
-
-
--- UPDATE
-
-
-type Msg
-    = NoOp
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        NoOp ->
-            ( model, Cmd.none )
-
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    div []
-        [ text <| model ++ " world" ]
+import Models exposing (Model, initialModel)
+import Msgs exposing (Msg(..))
+import Update exposing (update)
+import View exposing (view)
 
 
 
@@ -52,6 +18,11 @@ subscriptions model =
 
 
 -- MAIN
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( initialModel, Cmd.none )
 
 
 main : Program Never Model Msg
