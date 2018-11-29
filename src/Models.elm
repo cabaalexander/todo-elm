@@ -2,11 +2,11 @@ module Models exposing (Model, initialModel)
 
 
 type alias Model =
-    { text : String
+    { input : String
     }
 
 
 initialModel : Model
 initialModel =
-    { text = "Hello world"
+    { input = ""
     }
