@@ -1,11 +1,53 @@
 module Update exposing (update)
 
-import Models exposing (Model)
+import Models exposing (Model, Todo)
 import Msgs exposing (Msg(..))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        OnInputChange text ->
-            ( { model | input = text }, Cmd.none )
+        OnInputChange inputValue ->
+            ( { model | input = inputValue }, Cmd.none )
+
+        AddTodo ->
+            ( addTodo model, Cmd.none )
+
+        KeyDown code ->
+            ( addOnKeyDown code model, Cmd.none )
+
+
+addTodo : Model -> Model
+addTodo model =
+    if model.input == "" then
+        model
+
+    else
+        updateTodos model
+
+
+updateTodos : Model -> Model
+updateTodos model =
+    let
+        id =
+            List.length model.todos
+
+        newTodo =
+            Todo id model.input False
+
+        newTodos =
+            newTodo :: model.todos
+    in
+    { model
+        | todos = newTodos
+        , input = ""
+    }
+
+
+addOnKeyDown : Int -> Model -> Model
+addOnKeyDown code model =
+    if code == 13 then
+        addTodo model
+
+    else
+        model
