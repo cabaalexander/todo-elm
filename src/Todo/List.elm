@@ -19,7 +19,7 @@ viewList todos =
 
 
 viewTodo : Todo -> Html Msg
-viewTodo { id, name, check } =
+viewTodo { id, name } =
     li []
         [ label
             [ onClick <| ToggleCheck id

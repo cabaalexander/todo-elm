@@ -5,12 +5,14 @@ initialModel : Model
 initialModel =
     { input = ""
     , todos = []
+    , currentTodo = Todo 0 "" False
     }
 
 
 type alias Model =
     { input : String
     , todos : List Todo
+    , currentTodo : Todo
     }
 
 

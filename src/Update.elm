@@ -1,6 +1,6 @@
 module Update exposing (update)
 
-import Models exposing (Model, Todo)
+import Models exposing (Model, Todo, initialModel)
 import Msgs exposing (Msg(..))
 
 
@@ -8,7 +8,16 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnInputChange inputValue ->
-            ( { model | input = inputValue }, Cmd.none )
+            let
+                id =
+                    List.length model.todos
+            in
+            ( { model
+                | input = inputValue
+                , currentTodo = Todo id inputValue False
+              }
+            , Cmd.none
+            )
 
         AddTodo ->
             ( addTodo model, Cmd.none )
@@ -41,20 +50,16 @@ addTodo model =
 
 
 updateTodos : Model -> Model
-updateTodos model =
+updateTodos { todos, currentTodo } =
     let
         id =
-            List.length model.todos
-
-        newTodo =
-            Todo id model.input False
+            List.length todos
 
         newTodos =
-            newTodo :: model.todos
+            currentTodo :: todos
     in
-    { model
+    { initialModel
         | todos = newTodos
-        , input = ""
     }
 
 
