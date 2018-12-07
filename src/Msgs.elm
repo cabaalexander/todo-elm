@@ -6,3 +6,4 @@ type Msg
     | AddTodo
     | KeyDown Int
     | ToggleCheck Int
+    | RemoveTodo Int

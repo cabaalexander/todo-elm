@@ -23,6 +23,13 @@ update msg model =
             in
             ( { model | todos = newTodos }, Cmd.none )
 
+        RemoveTodo id ->
+            let
+                newTodos =
+                    List.filter (\t -> t.id /= id) model.todos
+            in
+            ( { model | todos = newTodos }, Cmd.none )
+
 
 addTodo : Model -> Model
 addTodo model =
