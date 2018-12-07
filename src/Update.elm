@@ -16,6 +16,13 @@ update msg model =
         KeyDown code ->
             ( addOnKeyDown code model, Cmd.none )
 
+        ToggleCheck id ->
+            let
+                newTodos =
+                    List.map (toggleTodo id) model.todos
+            in
+            ( { model | todos = newTodos }, Cmd.none )
+
 
 addTodo : Model -> Model
 addTodo model =
@@ -51,3 +58,12 @@ addOnKeyDown code model =
 
     else
         model
+
+
+toggleTodo : Int -> Todo -> Todo
+toggleTodo id todo =
+    if id == todo.id then
+        { todo | check = not todo.check }
+
+    else
+        todo
