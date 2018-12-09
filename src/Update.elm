@@ -11,10 +11,13 @@ update msg model =
             let
                 id =
                     List.length model.todos
+
+                newTodo =
+                    Todo id inputValue False 0
             in
             ( { model
                 | input = inputValue
-                , currentTodo = Todo id inputValue False
+                , currentTodo = newTodo
               }
             , Cmd.none
             )
@@ -40,27 +43,48 @@ update msg model =
             ( { model | todos = newTodos }, Cmd.none )
 
 
+riseTodoCount : Todo -> Todo
+riseTodoCount todo =
+    { todo | count = todo.count + 1 }
+
+
+addOrCountTodo : Todo -> List Todo -> List Todo
+addOrCountTodo todo todos =
+    let
+        names =
+            List.map (\x -> x.name) todos
+    in
+    if List.member todo.name names then
+        List.map
+            (\mapTodo ->
+                if mapTodo.name == todo.name then
+                    riseTodoCount mapTodo
+
+                else
+                    mapTodo
+            )
+            todos
+
+    else
+        todo :: todos
+
+
 addTodo : Model -> Model
 addTodo model =
     if model.input == "" then
         model
 
     else
-        updateTodos model
+        let
+            id =
+                List.length model.todos
 
-
-updateTodos : Model -> Model
-updateTodos { todos, currentTodo } =
-    let
-        id =
-            List.length todos
-
-        newTodos =
-            currentTodo :: todos
-    in
-    { initialModel
-        | todos = newTodos
-    }
+            newTodos =
+                addOrCountTodo model.currentTodo model.todos
+        in
+        { initialModel
+            | todos = newTodos
+        }
 
 
 addOnKeyDown : Int -> Model -> Model

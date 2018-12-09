@@ -5,7 +5,7 @@ initialModel : Model
 initialModel =
     { input = ""
     , todos = []
-    , currentTodo = Todo 0 "" False
+    , currentTodo = Todo 0 "" False 0
     }
 
 
@@ -20,4 +20,5 @@ type alias Todo =
     { id : Int
     , name : String
     , check : Bool
+    , count : Int
     }

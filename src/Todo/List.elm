@@ -1,6 +1,6 @@
 module Todo.List exposing (view)
 
-import Html exposing (Html, button, div, i, input, label, li, text, ul)
+import Html exposing (Html, button, i, input, label, li, span, text, ul)
 import Html.Attributes exposing (type_)
 import Html.Events exposing (onClick)
 import Models exposing (Model, Todo)
@@ -19,7 +19,7 @@ viewList todos =
 
 
 viewTodo : Todo -> Html Msg
-viewTodo { id, name } =
+viewTodo { id, name, count } =
     li []
         [ label
             [ onClick <| ToggleCheck id
@@ -27,6 +27,9 @@ viewTodo { id, name } =
             [ input [ type_ "checkbox" ] []
             , text name
             ]
+        , span
+            []
+            [ text <| toString count ]
         , button
             [ onClick <| RemoveTodo id
             ]
