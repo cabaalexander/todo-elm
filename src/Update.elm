@@ -1,7 +1,7 @@
 module Update exposing (update)
 
 import Models exposing (Model, Todo, initialModel)
-import Msgs exposing (Msg(..))
+import Msgs exposing (Msg(..), SortMode(..))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -41,6 +41,37 @@ update msg model =
                     List.filter (\t -> t.id /= id) model.todos
             in
             ( { model | todos = newTodos }, Cmd.none )
+
+        ToggleSortBy ->
+            let
+                toggle =
+                    if model.sortMode == Asc then
+                        Desc
+
+                    else
+                        Asc
+
+                newModel =
+                    { model
+                        | sortMode = toggle
+                    }
+                        |> sortTodos
+            in
+            ( newModel, Cmd.none )
+
+
+sortTodos : Model -> Model
+sortTodos model =
+    let
+        sortedTodos =
+            List.sortBy .count model.todos
+    in
+    case model.sortMode of
+        Asc ->
+            { model | todos = List.reverse sortedTodos }
+
+        Desc ->
+            { model | todos = sortedTodos }
 
 
 riseTodoCount : Todo -> Todo
