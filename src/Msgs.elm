@@ -1,4 +1,4 @@
-module Msgs exposing (Msg(..), SortMode(..))
+module Msgs exposing (Msg(..))
 
 
 type Msg
@@ -7,9 +7,5 @@ type Msg
     | KeyDown Int
     | ToggleCheck Int
     | RemoveTodo Int
-    | ToggleSortBy
-
-
-type SortMode
-    = Asc
+    | Asc
     | Desc

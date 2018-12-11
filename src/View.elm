@@ -1,11 +1,11 @@
 module View exposing (view)
 
-import Html exposing (Attribute, Html, button, div, h1, input, text)
+import Html exposing (Attribute, Html, button, div, h1, input, label, text)
 import Html.Attributes exposing (placeholder, value)
 import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode as D
 import Models exposing (Model)
-import Msgs exposing (Msg(..), SortMode(..))
+import Msgs exposing (Msg(..))
 import Todo.List exposing (view)
 
 
@@ -18,7 +18,7 @@ view model =
             [ onClick AddTodo ]
             [ text "Add" ]
         , Todo.List.view model
-        , bottom model.sortMode
+        , bottom
         ]
 
 
@@ -38,20 +38,22 @@ onKeydown tagger =
     on "keydown" (D.map tagger keyCode)
 
 
-bottom : SortMode -> Html Msg
-bottom sortMode =
+bottom : Html Msg
+bottom =
     let
-        message =
-            case sortMode of
-                Asc ->
-                    "Asc"
+        buttons : List ( Msg, String ) -> List (Html Msg)
+        buttons lst =
+            case lst of
+                [] ->
+                    []
 
-                Desc ->
-                    "Desc"
+                ( msg, txt ) :: xs ->
+                    [ button
+                        [ onClick <| msg ]
+                        [ text <| txt ]
+                    ]
+                        ++ buttons xs
     in
-    div []
-        [ text "Sort by:"
-        , button [ onClick ToggleSortBy ]
-            [ text message
-            ]
-        ]
+    div [] <|
+        [ label [] [ text "Sort by:" ] ]
+            ++ buttons [ ( Asc, "^" ), ( Desc, "v" ) ]
