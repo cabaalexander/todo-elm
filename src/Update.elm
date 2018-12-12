@@ -17,7 +17,7 @@ update msg model =
             in
             ( { model
                 | input = inputValue
-                , currentTodo = newTodo
+                , current = newTodo
               }
             , Cmd.none
             )
@@ -110,11 +110,11 @@ addTodo model =
 
         _ ->
             let
-                { todos, currentTodo } =
+                { todos, current } =
                     model
 
                 newTodos =
-                    addOrCountTodo currentTodo todos
+                    addOrCountTodo current todos
             in
             { initialModel | todos = newTodos }
 

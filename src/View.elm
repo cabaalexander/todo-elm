@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Html exposing (Attribute, Html, button, div, h1, input, label, text)
+import Html exposing (Attribute, Html, button, div, h1, i, input, label, text)
 import Html.Attributes exposing (placeholder, value)
 import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode as D
@@ -43,17 +43,20 @@ bottom =
     let
         buttons : List ( Msg, String ) -> List (Html Msg)
         buttons lst =
-            case lst of
-                [] ->
-                    []
-
-                ( msg, txt ) :: xs ->
-                    [ button
-                        [ onClick <| msg ]
-                        [ text <| txt ]
-                    ]
-                        ++ buttons xs
+            List.foldl
+                (\( msg, txt ) xs ->
+                    xs
+                        ++ [ button [ onClick msg ]
+                                [ i [] [ text txt ]
+                                ]
+                           ]
+                )
+                []
+                lst
     in
     div [] <|
         [ label [] [ text "Sort by:" ] ]
-            ++ buttons [ ( Asc, "^" ), ( Desc, "v" ) ]
+            ++ buttons
+                [ ( Asc, "^" )
+                , ( Desc, "v" )
+                ]
