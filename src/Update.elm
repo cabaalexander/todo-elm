@@ -26,7 +26,16 @@ update msg model =
             ( addTodo model, Cmd.none )
 
         KeyDown code ->
-            ( addOnKeyDown code model, Cmd.none )
+            let
+                newModel =
+                    case code of
+                        13 ->
+                            addTodo model
+
+                        _ ->
+                            model
+            in
+            ( newModel, Cmd.none )
 
         ToggleCheck id ->
             let
@@ -68,27 +77,26 @@ update msg model =
             ( { model | todos = newTodos }, Cmd.none )
 
 
-riseTodoCount : Todo -> Todo
-riseTodoCount todo =
-    { todo | count = todo.count + 1 }
+riseTodoCount : String -> Todo -> Todo
+riseTodoCount name todo =
+    if name == todo.name then
+        { todo | count = todo.count + 1 }
+
+    else
+        todo
 
 
 addOrCountTodo : Todo -> List Todo -> List Todo
 addOrCountTodo todo todos =
     let
         names =
-            List.map (\x -> x.name) todos
-    in
-    if List.member todo.name names then
-        List.map
-            (\mapTodo ->
-                if mapTodo.name == todo.name then
-                    riseTodoCount mapTodo
+            List.map .name todos
 
-                else
-                    mapTodo
-            )
-            todos
+        todoName =
+            .name todo
+    in
+    if List.member todoName names then
+        List.map (riseTodoCount todoName) todos
 
     else
         todos ++ [ todo ]
@@ -96,29 +104,19 @@ addOrCountTodo todo todos =
 
 addTodo : Model -> Model
 addTodo model =
-    if model.input == "" then
-        model
+    case model.input of
+        "" ->
+            model
 
-    else
-        let
-            id =
-                List.length model.todos
+        _ ->
+            let
+                { todos, currentTodo } =
+                    model
 
-            newTodos =
-                addOrCountTodo model.currentTodo model.todos
-        in
-        { initialModel
-            | todos = newTodos
-        }
-
-
-addOnKeyDown : Int -> Model -> Model
-addOnKeyDown code model =
-    if code == 13 then
-        addTodo model
-
-    else
-        model
+                newTodos =
+                    addOrCountTodo currentTodo todos
+            in
+            { initialModel | todos = newTodos }
 
 
 toggleTodo : Int -> Todo -> Todo
